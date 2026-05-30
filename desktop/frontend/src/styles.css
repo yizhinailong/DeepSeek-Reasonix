@@ -98,6 +98,7 @@ body {
 
 /* ── top bar (drag region) ───────────────────────────────────────────────── */
 .topbar {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -109,24 +110,19 @@ body {
   --wails-draggable: drag;
   user-select: none;
 }
-.topbar__mark {
-  color: var(--accent);
-  font-size: 10px;
-  line-height: 1;
-}
-.topbar__brand {
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.2px;
-}
 .topbar__model {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 56%;
   font-family: var(--mono);
   font-size: 11.5px;
-  color: var(--fg-faint);
+  color: var(--fg-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
+  pointer-events: none; /* never block dragging / the right-side chips */
 }
 .topbar__spacer {
   flex: 1;
@@ -190,7 +186,7 @@ body {
   margin-right: auto;
 }
 
-.empty {
+.welcome {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -199,16 +195,69 @@ body {
   text-align: center;
   color: var(--fg-faint);
 }
-.empty__title {
-  font-size: 19px;
-  font-weight: 600;
-  color: var(--fg-dim);
+.welcome__logo {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 16px;
+  border-radius: 13px;
+}
+.welcome__title {
+  font-size: 22px;
+  font-weight: 650;
+  color: var(--fg);
   letter-spacing: 0.3px;
 }
-.empty__hint {
-  margin-top: 7px;
-  max-width: 360px;
+.welcome__tag {
+  margin-top: 6px;
+  font-size: 13.5px;
+  color: var(--fg-dim);
+}
+.welcome__hints {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+  font-size: 12.5px;
+}
+.welcome__hints span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.welcome kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fg-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+}
+.welcome__examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 26px;
+  width: 100%;
+  max-width: 380px;
+}
+.welcome__ex {
+  text-align: left;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  color: var(--fg-dim);
+  font: inherit;
   font-size: 13px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.welcome__ex:hover {
+  color: var(--fg);
+  border-color: var(--accent-soft);
+  background: var(--bg-elev);
 }
 
 /* ── messages ────────────────────────────────────────────────────────────── */
@@ -386,6 +435,52 @@ body {
 }
 .code--loading {
   opacity: 0.55;
+}
+
+/* copy affordance — code blocks (hover) and message actions */
+.copybtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  color: var(--fg-faint);
+  border-radius: 6px;
+  padding: 3px 7px;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+.copybtn:hover {
+  color: var(--fg);
+  border-color: var(--fg-faint);
+}
+.copybtn__label {
+  line-height: 1;
+}
+.code-block {
+  position: relative;
+}
+.code-block__copy {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 2;
+  opacity: 0;
+  padding: 3px 5px;
+  transition: opacity 0.12s;
+}
+.code-block:hover .code-block__copy {
+  opacity: 1;
+}
+.msg__actions {
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.msg--assistant:hover .msg__actions {
+  opacity: 1;
 }
 
 /* ── diff ────────────────────────────────────────────────────────────────── */
@@ -647,11 +742,11 @@ body {
 .composer {
   display: flex;
   gap: 8px;
-  align-items: flex-end;
+  align-items: center;
   background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 9px 9px 9px 12px;
+  padding: 8px 8px 8px 12px;
   transition: border-color 0.12s;
 }
 .composer:focus-within {
@@ -661,7 +756,7 @@ body {
   color: var(--accent);
   font-family: var(--mono);
   font-weight: 600;
-  line-height: 1.7;
+  line-height: 1.55;
   flex-shrink: 0;
 }
 .composer__input {

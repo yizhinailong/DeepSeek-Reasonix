@@ -2,8 +2,9 @@ import { useEffect, useRef } from "react";
 import type { Item } from "../lib/useController";
 import { AssistantMessage, UserMessage } from "./Message";
 import { ToolCard } from "./ToolCard";
+import { Welcome } from "./Welcome";
 
-export function Transcript({ items }: { items: Item[] }) {
+export function Transcript({ items, onPrompt }: { items: Item[]; onPrompt: (text: string) => void }) {
   const endRef = useRef<HTMLDivElement>(null);
 
   // Keep the newest content in view as the turn streams.
@@ -13,14 +14,7 @@ export function Transcript({ items }: { items: Item[] }) {
 
   return (
     <div className="transcript">
-      {items.length === 0 && (
-        <div className="empty">
-          <div className="empty__title">Reasonix</div>
-          <div className="empty__hint">
-            Ask anything, or describe a task. Reasoning, tool calls, and approvals appear inline.
-          </div>
-        </div>
-      )}
+      {items.length === 0 && <Welcome onPrompt={onPrompt} />}
 
       {items.map((it) => {
         switch (it.kind) {

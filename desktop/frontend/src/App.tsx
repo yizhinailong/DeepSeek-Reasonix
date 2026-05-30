@@ -19,9 +19,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <span className="topbar__mark">◆</span>
-        <span className="topbar__brand">Reasonix</span>
-        {state.meta?.label && <span className="topbar__model">{state.meta.label}</span>}
+        <span className="topbar__model">{state.meta?.label ?? "…"}</span>
         <div className="topbar__spacer" />
         <button
           className={`chip ${plan ? "chip--on" : ""}`}
@@ -40,7 +38,7 @@ export default function App() {
       )}
 
       <main className="main">
-        <Transcript items={state.items} />
+        <Transcript items={state.items} onPrompt={send} />
       </main>
 
       <footer className="footer">

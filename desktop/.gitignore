@@ -1,7 +1,7 @@
-# Wails build assets/output — all auto-generated from defaults (icons, plists,
-# manifests, compiled binary); `wails dev`/`wails build` regenerate what's missing.
-# Un-ignore specific files here once you customize them (e.g. a real app icon).
-/build/
+# Wails build assets/output — mostly auto-generated (plists, manifests, compiled
+# binary); ignore them but keep the committed designed app icon.
+/build/*
+!/build/appicon.png
 
 # Go test binaries
 *.test

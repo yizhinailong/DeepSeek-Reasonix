@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Markdown } from "./Markdown";
+import { CopyButton } from "./CopyButton";
 import type { Item } from "../lib/useController";
 
 type AssistantItem = Extract<Item, { kind: "assistant" }>;
@@ -34,6 +35,11 @@ export function AssistantMessage({ item }: { item: AssistantItem }) {
         <Markdown text={item.text} />
         {item.streaming && <span className="cursor" />}
       </div>
+      {!item.streaming && item.text && (
+        <div className="msg__actions">
+          <CopyButton text={item.text} label="Copy" />
+        </div>
+      )}
     </div>
   );
 }

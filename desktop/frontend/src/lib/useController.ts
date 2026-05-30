@@ -193,12 +193,17 @@ function reducer(s: State, a: Action): State {
     case "context":
       return { ...s, context: a.context };
     case "history": {
-      const items: Item[] = a.messages.map((m, i) =>
+      // Only user/assistant turns with visible text — never the system prompt or
+      // tool-result messages, and not the empty content of a tool-call-only turn.
+      const visible = a.messages.filter(
+        (m) => (m.role === "user" || m.role === "assistant") && m.content.trim() !== "",
+      );
+      const items: Item[] = visible.map((m, i) =>
         m.role === "user"
           ? { kind: "user", id: `h${i}`, text: m.content }
           : { kind: "assistant", id: `h${i}`, text: m.content, reasoning: "", streaming: false },
       );
-      return { ...s, items, seq: s.seq + a.messages.length };
+      return { ...s, items, seq: s.seq + visible.length };
     }
     case "clearApproval":
       return { ...s, approval: undefined };
